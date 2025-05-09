@@ -1,6 +1,20 @@
 import { Link } from 'react-router-dom';
+import useFetch from '../hooks/useFetch';
 
 function Blogs() {
+  const { data, loading, error } = useFetch('http://localhost:1337/api/blogs');
+
+  if(loading){
+    return <h2>Loading...</h2>
+  }
+
+  if(error){
+    return <h2>Something went wrong...</h2>
+  }
+
+  console.log(data);
+  
+
   return (
     <div className="flex flex-col gap-10 p-10">
       Blogs
