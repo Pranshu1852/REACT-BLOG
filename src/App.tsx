@@ -1,19 +1,38 @@
-import { Route, Routes, useRoutes } from 'react-router-dom'
-import './App.css'
-import Navbar from './components/Navbar'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import Blogs from './pages/Blogs'
-import BlogPage from './pages/BlogPage'
-import BlogLayout from './pages/BlogLayout'
-import NotFound from './pages/NotFound'
-import SignUp from './pages/Signup'
+import { Route, Routes } from 'react-router-dom';
+import './App.css';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Blogs from './pages/Blogs';
+import BlogPage from './pages/BlogPage';
+import NotFound from './pages/NotFound';
+import SignUp from './pages/Signup';
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { type StateType } from './store/store';
 
 function App() {
+  const { i18n } = useTranslation();
+  const { language } = useSelector((state: StateType) => {
+    return {
+      language: state.general.language,
+    };
+  });
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, []);
+
+  useEffect(() => {
+    document.body.dir = i18n.dir();
+  }, [i18n, i18n.language]);
+
   // let element=useRoutes([
   //   {
   //     path: '/',
   //     // element: <Home />,
+  //     // errorElement=<NotFound/>,
   //     children: [
   //       {
   //         index: true,
@@ -42,21 +61,21 @@ function App() {
   // ])
 
   return (
-    <div className='font-[Montserrat]'>
-      <Navbar/>
+    <div className="font-[Montserrat]">
+      <Navbar />
       {/* {element} */}
       <Routes>
-        <Route path='/' element={<Home />}/>
-        <Route path='/login' element={<Login />}/>
-        <Route path='/signup' element={<SignUp />}/>
-        <Route path='/blog' element={<BlogLayout/>}>
-          <Route index element={<Blogs />}/>
-          <Route path='/blog/:id' element={<BlogPage />}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/blog">
+          <Route index element={<Blogs />} />
+          <Route path="/blog/:id" element={<BlogPage />} />
         </Route>
-        <Route path='*' element={<NotFound/>}/>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
