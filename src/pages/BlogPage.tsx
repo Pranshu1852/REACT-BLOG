@@ -1,11 +1,21 @@
 import { Link } from 'react-router-dom';
 import profilePic from '../assets/profile.png';
+import useFetch from '../hooks/useFetch';
 
 function BlogPage() {
   // const {val}:{val: number}=useOutletContext();
+  const { loading, error } = useFetch('http://localhost:1337/api/blogs');
+
+  if (loading) {
+    return <h2>Loading...</h2>;
+  }
+
+  if (error) {
+    return <h2>Something went wrong...</h2>;
+  }
 
   return (
-    <div className="flex flex-col gap-10 items-center justify-center w-[50%] mt-14 m-auto">
+    <div className="flex flex-col gap-10 justify-center w-[50%] text-start mt-14 m-auto">
       <h2 className="text-5xl font-bold leading-[60px]">
         Implementing Role-Based Access Control (RBAC) in Node.js and React
       </h2>
@@ -25,6 +35,7 @@ function BlogPage() {
       </div>
       <p className="border-[1.5px] border-gray-200 w-full rounded-full" />
       <p className="border-[1.5px] border-gray-200 w-full rounded-full" />
+      <p></p>
     </div>
   );
 }
