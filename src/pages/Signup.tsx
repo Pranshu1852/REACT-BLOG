@@ -1,30 +1,67 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import FormField from '../components/FormField';
 import {
+  useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type FocusEvent,
   type FormEvent,
 } from 'react';
+import { useSelector } from 'react-redux';
+import type { StateType } from '../store/store';
 
 function SignUp() {
+  const navigate = useNavigate();
   const [signUpData, setSignUpData] = useState({
     username: '',
     email: '',
     password: '',
   });
 
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-  }
+  const { isLogin } = useSelector((state: StateType) => {
+    return {
+      isLogin: state.general.isLogin,
+    };
+  });
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate('/');
+    }
+  }, []);
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    setSignUpData((prevData)=>{
+    console.log('inside');
+
+    setSignUpData((prevData) => {
       return {
         ...prevData,
-        [event.target.name]: event.target.value
-      }
-    })
+        [event.target.name]: event.target.value,
+      };
+    });
+  }
+
+  const errorUsername = useRef('');
+  const errorEmail = useRef('');
+  const errorPassword = useRef('');
+  const [submit, setSubmit] = useState(false);
+
+  function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    setSubmit(true);
+
+    if (
+      submit &&
+      (errorEmail.current || errorPassword.current || errorUsername.current)
+    ) {
+      setSubmit(false);
+      return;
+    }
+
+    if (submit) {
+      console.log('Form Submitted');
+    }
   }
 
   return (
@@ -50,8 +87,10 @@ function SignUp() {
               message: `min value require 5`,
             },
           }}
-          minLength={5}
-          required
+          error={errorUsername}
+          value={signUpData.username}
+          onChange={handleChange}
+          submit={submit}
         />
         <FormField
           label="Email"
@@ -73,6 +112,10 @@ function SignUp() {
               message: 'Please enter valid email',
             },
           }}
+          error={errorEmail}
+          value={signUpData.email}
+          onChange={handleChange}
+          submit={submit}
         />
         <FormField
           label="Password"
@@ -80,6 +123,10 @@ function SignUp() {
           placeholder="Enter your Password..."
           name="password"
           type="password"
+          error={errorPassword}
+          value={signUpData.password}
+          onChange={handleChange}
+          submit={submit}
         />
         <Link to="/login" className="font-medium">
           Already have an account

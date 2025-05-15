@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { type StateType } from './store/store';
+import AddBlog from './pages/AddBlog';
 
 function App() {
   const { i18n } = useTranslation();
@@ -68,6 +69,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/addblog" element={<AddBlog />} />
         <Route path="/blog">
           <Route index element={<Blogs />} />
           <Route path="/blog/:id" element={<BlogPage />} />

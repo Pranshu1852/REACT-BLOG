@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 
-
 function Blogs() {
-
   return (
     <div className="flex flex-col gap-10 p-10">
       Blogs

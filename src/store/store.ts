@@ -3,6 +3,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 const initialGeneralState = {
   themeMode: localStorage.getItem('theme') || 'light',
   language: localStorage.getItem('lang') || 'en',
+  isLogin: localStorage.getItem('auth-token') ? true : false,
 };
 
 const generalSlice = createSlice({
@@ -18,6 +19,9 @@ const generalSlice = createSlice({
       const newLanguage = action.payload;
       localStorage.setItem('lang', newLanguage);
       state.language = newLanguage;
+    },
+    setisLogin(state, action) {
+      state.isLogin = action.payload;
     },
   },
 });
